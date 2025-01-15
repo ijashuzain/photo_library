@@ -1,16 +1,21 @@
+import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_library/gen/assets.gen.dart';
 import 'package:photo_library/gen/fonts.gen.dart';
 import 'package:photo_library/src/domain/models/photo_model/photo_model.dart';
 import 'package:photo_library/src/presentation/blocs/home_bloc/home_bloc.dart';
 import 'package:photo_library/src/presentation/core/status/status.dart';
+import 'package:photo_library/src/presentation/views/home_view/widgets/photo_detail_dialog.dart';
 import 'package:photo_library/src/presentation/widgets/pinterest_grid.dart';
 import 'package:the_responsive_builder/the_responsive_builder.dart';
+import 'package:http/http.dart' as http;
 
 @RoutePage()
 class HomeView extends StatefulWidget {
@@ -44,7 +49,6 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _handleRefresh() async {
     context.read<HomeBloc>().add(HomeEvent.getPhotosEvent());
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +113,10 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 0.dp, vertical: 16.dp),
+                padding: EdgeInsets.symmetric(vertical: 16.dp),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    _buildImageListSection(),
+                    _buildPhotoListSection(),
                   ]),
                 ),
               ),
@@ -123,20 +127,21 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildImageListSection() {
+  Widget _buildPhotoListSection() {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
       if (state.getPhotosStatus is StatusLoading) {
-        return  Padding(
-            padding: EdgeInsets.only(top: 50.h - 90.dp),
-            child: Center(child: CircularProgressIndicator()));
+        return Padding(padding: EdgeInsets.only(top: 50.h - 90.dp), child: Center(child: CircularProgressIndicator()));
       }
-      final items = state.photos; 
+      final items = state.photos;
       if (items.isEmpty) {
-        return const Center(child: Text('No items found'));
+        return Padding(
+          padding: EdgeInsets.only(top: 50.h - 90.dp),
+          child: const Center(child: Text('No items found')),
+        );
       }
-      return PinterestGrid(
+      return PhotoGrid(
         items: state.photos
-            .map((photo) => PinterestItem(
+            .map((photo) => PhotoItem(
                 id: photo.id, imageUrl: photo.urls.smallS3.isNotEmpty ? photo.urls.smallS3 : photo.urls.small, title: photo.description.isNotEmpty ? photo.description : photo.altDescription, likeCount: photo.likes, aspectRatio: photo.aspectRatio))
             .toList(),
         onItemTap: (String id) {
@@ -147,90 +152,75 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-
   void _showImageDialog(BuildContext context, PhotoModel photo) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return Stack(
-          children: [
-            // Blurred background
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
-            // Dialog content
-            Center(
-              child: AnimatedScale(
-                scale: 1.0,
-                duration: const Duration(milliseconds: 300),
-                child: Dialog(
-                  backgroundColor: Colors.transparent,
-                  insetPadding: EdgeInsets.all(16.dp),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      // Image
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.dp),
-                        child: Image.network(
-                          photo.urls.smallS3.isNotEmpty ? photo.urls.smallS3 : photo.urls.small,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[200],
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: Colors.grey,
-                                  size: 40.dp,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      // Close button
-                      Positioned(
-                        top: 16.dp,
-                        right: 16.dp,
-                        child: FloatingActionButton(
-                          mini: true,
-                          onPressed: () => Navigator.of(context).pop(),
-                          backgroundColor: Colors.white,
-                          child: const Icon(Icons.close, color: Colors.black),
-                        ),
-                      ),
-                      // Download button
-                      Positioned(
-                        bottom: 16.dp,
-                        right: 16.dp,
-                        child: FloatingActionButton(
-                          mini: true,
-                          onPressed: () {
-                            _downloadImage(photo.links.download);
-                          },
-                          backgroundColor: Colors.white,
-                          child: const Icon(Icons.download, color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+        return PhotoDetailDialog(
+            photo: photo,
+            onDownload: () {
+              _downloadPhoto(photo.links.download);
+            });
       },
     );
   }
 
-  void _downloadImage(String imageUrl) {
-    // Add logic to download the image
-    print('Downloading image: $imageUrl');
-  }
+  void _downloadPhoto(String url) async {
+    await Permission.storage.request();
 
+    try {
+      Fluttertoast.showToast(
+        msg: "Downloading photo...",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+      );
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final Uint8List imageData = response.bodyBytes;
+
+        final result = await ImageGallerySaverPlus.saveImage(
+          imageData,
+          quality: 100,
+          name: "photo_${DateTime.now().millisecondsSinceEpoch}",
+        );
+
+        if (result['isSuccess'] == true) {
+          Fluttertoast.showToast(
+            msg: "Photo saved to gallery!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.blueAccent,
+            textColor: Colors.white,
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: "Failed to save photo.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to download photo.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "An error occurred: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
 }

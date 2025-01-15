@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_library/src/presentation/views/home_view/home_view.dart';
-import 'package:photo_library/src/presentation/views/splash_view/splash_view.dart';
 
 part 'app_router.gr.dart';
 
@@ -21,8 +20,7 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes {
     return [
-      AutoRoute(page: SplashRoute.page, initial: true),
-      AutoRoute(page: HomeRoute.page),
+      AutoRoute(page: HomeRoute.page,initial: true),
     ];
   }
 }

@@ -3,14 +3,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:the_responsive_builder/the_responsive_builder.dart';
 
-class PinterestItem {
+class PhotoItem {
   final String id;
   final String imageUrl;
   final String title;
   final int likeCount;
   final double aspectRatio;
 
-  PinterestItem({
+  PhotoItem({
     required this.id,
     required this.imageUrl,
     required this.title,
@@ -19,12 +19,12 @@ class PinterestItem {
   });
 }
 
-class PinterestGrid extends StatelessWidget {
-  final List<PinterestItem> items;
+class PhotoGrid extends StatelessWidget {
+  final List<PhotoItem> items;
   final Function(String) onItemTap;
   final ScrollController? scrollController;
 
-  const PinterestGrid({
+  const PhotoGrid({
     Key? key,
     required this.items,
     required this.onItemTap,
@@ -72,6 +72,7 @@ class PinterestGrid extends StatelessWidget {
                           color: Colors.grey[200],
                           child: Center(
                             child: CircularProgressIndicator(
+                              color: Colors.grey.shade50,
                               value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                             ),
                           ),
