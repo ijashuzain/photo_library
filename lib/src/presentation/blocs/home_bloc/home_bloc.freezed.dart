@@ -16,19 +16,20 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$HomeEvent {
+  bool get isLoadMore => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getPhotosEvent,
+    required TResult Function(bool isLoadMore) getPhotosEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getPhotosEvent,
+    TResult? Function(bool isLoadMore)? getPhotosEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getPhotosEvent,
+    TResult Function(bool isLoadMore)? getPhotosEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -48,12 +49,20 @@ mixin _$HomeEvent {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Create a copy of HomeEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $HomeEventCopyWith<HomeEvent> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $HomeEventCopyWith<$Res> {
   factory $HomeEventCopyWith(HomeEvent value, $Res Function(HomeEvent) then) =
       _$HomeEventCopyWithImpl<$Res, HomeEvent>;
+  @useResult
+  $Res call({bool isLoadMore});
 }
 
 /// @nodoc
@@ -68,13 +77,29 @@ class _$HomeEventCopyWithImpl<$Res, $Val extends HomeEvent>
 
   /// Create a copy of HomeEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isLoadMore = null,
+  }) {
+    return _then(_value.copyWith(
+      isLoadMore: null == isLoadMore
+          ? _value.isLoadMore
+          : isLoadMore // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
 }
 
 /// @nodoc
-abstract class _$$GetPhotosEventImplCopyWith<$Res> {
+abstract class _$$GetPhotosEventImplCopyWith<$Res>
+    implements $HomeEventCopyWith<$Res> {
   factory _$$GetPhotosEventImplCopyWith(_$GetPhotosEventImpl value,
           $Res Function(_$GetPhotosEventImpl) then) =
       __$$GetPhotosEventImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool isLoadMore});
 }
 
 /// @nodoc
@@ -87,51 +112,79 @@ class __$$GetPhotosEventImplCopyWithImpl<$Res>
 
   /// Create a copy of HomeEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isLoadMore = null,
+  }) {
+    return _then(_$GetPhotosEventImpl(
+      isLoadMore: null == isLoadMore
+          ? _value.isLoadMore
+          : isLoadMore // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$GetPhotosEventImpl implements _GetPhotosEvent {
-  const _$GetPhotosEventImpl();
+  const _$GetPhotosEventImpl({this.isLoadMore = false});
+
+  @override
+  @JsonKey()
+  final bool isLoadMore;
 
   @override
   String toString() {
-    return 'HomeEvent.getPhotosEvent()';
+    return 'HomeEvent.getPhotosEvent(isLoadMore: $isLoadMore)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetPhotosEventImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$GetPhotosEventImpl &&
+            (identical(other.isLoadMore, isLoadMore) ||
+                other.isLoadMore == isLoadMore));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, isLoadMore);
+
+  /// Create a copy of HomeEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetPhotosEventImplCopyWith<_$GetPhotosEventImpl> get copyWith =>
+      __$$GetPhotosEventImplCopyWithImpl<_$GetPhotosEventImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getPhotosEvent,
+    required TResult Function(bool isLoadMore) getPhotosEvent,
   }) {
-    return getPhotosEvent();
+    return getPhotosEvent(isLoadMore);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getPhotosEvent,
+    TResult? Function(bool isLoadMore)? getPhotosEvent,
   }) {
-    return getPhotosEvent?.call();
+    return getPhotosEvent?.call(isLoadMore);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getPhotosEvent,
+    TResult Function(bool isLoadMore)? getPhotosEvent,
     required TResult orElse(),
   }) {
     if (getPhotosEvent != null) {
-      return getPhotosEvent();
+      return getPhotosEvent(isLoadMore);
     }
     return orElse();
   }
@@ -166,13 +219,24 @@ class _$GetPhotosEventImpl implements _GetPhotosEvent {
 }
 
 abstract class _GetPhotosEvent implements HomeEvent {
-  const factory _GetPhotosEvent() = _$GetPhotosEventImpl;
+  const factory _GetPhotosEvent({final bool isLoadMore}) = _$GetPhotosEventImpl;
+
+  @override
+  bool get isLoadMore;
+
+  /// Create a copy of HomeEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GetPhotosEventImplCopyWith<_$GetPhotosEventImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$HomeState {
   Status get getPhotosStatus => throw _privateConstructorUsedError;
   List<PhotoModel> get photos => throw _privateConstructorUsedError;
+  Pagination get pagination => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -186,9 +250,11 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({Status getPhotosStatus, List<PhotoModel> photos});
+  $Res call(
+      {Status getPhotosStatus, List<PhotoModel> photos, Pagination pagination});
 
   $StatusCopyWith<$Res> get getPhotosStatus;
+  $PaginationCopyWith<$Res> get pagination;
 }
 
 /// @nodoc
@@ -208,6 +274,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   $Res call({
     Object? getPhotosStatus = null,
     Object? photos = null,
+    Object? pagination = null,
   }) {
     return _then(_value.copyWith(
       getPhotosStatus: null == getPhotosStatus
@@ -218,6 +285,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
               as List<PhotoModel>,
+      pagination: null == pagination
+          ? _value.pagination
+          : pagination // ignore: cast_nullable_to_non_nullable
+              as Pagination,
     ) as $Val);
   }
 
@@ -230,6 +301,16 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       return _then(_value.copyWith(getPhotosStatus: value) as $Val);
     });
   }
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PaginationCopyWith<$Res> get pagination {
+    return $PaginationCopyWith<$Res>(_value.pagination, (value) {
+      return _then(_value.copyWith(pagination: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -240,10 +321,13 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status getPhotosStatus, List<PhotoModel> photos});
+  $Res call(
+      {Status getPhotosStatus, List<PhotoModel> photos, Pagination pagination});
 
   @override
   $StatusCopyWith<$Res> get getPhotosStatus;
+  @override
+  $PaginationCopyWith<$Res> get pagination;
 }
 
 /// @nodoc
@@ -261,6 +345,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   $Res call({
     Object? getPhotosStatus = null,
     Object? photos = null,
+    Object? pagination = null,
   }) {
     return _then(_$HomeStateImpl(
       getPhotosStatus: null == getPhotosStatus
@@ -271,6 +356,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
               as List<PhotoModel>,
+      pagination: null == pagination
+          ? _value.pagination
+          : pagination // ignore: cast_nullable_to_non_nullable
+              as Pagination,
     ));
   }
 }
@@ -279,7 +368,9 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
-      {required this.getPhotosStatus, required final List<PhotoModel> photos})
+      {required this.getPhotosStatus,
+      required final List<PhotoModel> photos,
+      required this.pagination})
       : _photos = photos;
 
   @override
@@ -293,8 +384,11 @@ class _$HomeStateImpl implements _HomeState {
   }
 
   @override
+  final Pagination pagination;
+
+  @override
   String toString() {
-    return 'HomeState(getPhotosStatus: $getPhotosStatus, photos: $photos)';
+    return 'HomeState(getPhotosStatus: $getPhotosStatus, photos: $photos, pagination: $pagination)';
   }
 
   @override
@@ -304,12 +398,14 @@ class _$HomeStateImpl implements _HomeState {
             other is _$HomeStateImpl &&
             (identical(other.getPhotosStatus, getPhotosStatus) ||
                 other.getPhotosStatus == getPhotosStatus) &&
-            const DeepCollectionEquality().equals(other._photos, _photos));
+            const DeepCollectionEquality().equals(other._photos, _photos) &&
+            (identical(other.pagination, pagination) ||
+                other.pagination == pagination));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, getPhotosStatus,
-      const DeepCollectionEquality().hash(_photos));
+      const DeepCollectionEquality().hash(_photos), pagination);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -323,12 +419,15 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {required final Status getPhotosStatus,
-      required final List<PhotoModel> photos}) = _$HomeStateImpl;
+      required final List<PhotoModel> photos,
+      required final Pagination pagination}) = _$HomeStateImpl;
 
   @override
   Status get getPhotosStatus;
   @override
   List<PhotoModel> get photos;
+  @override
+  Pagination get pagination;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

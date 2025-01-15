@@ -15,6 +15,10 @@ import 'package:photo_library/src/core/services/api_services/api_service.dart'
     as _i154;
 import 'package:photo_library/src/core/services/api_services/config/url_config.dart'
     as _i541;
+import 'package:photo_library/src/data/repositories/photos_repository_impl.dart'
+    as _i135;
+import 'package:photo_library/src/domain/repositories/photos_repository.dart'
+    as _i471;
 import 'package:photo_library/src/presentation/blocs/home_bloc/home_bloc.dart'
     as _i602;
 
@@ -33,7 +37,6 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.factory<_i602.HomeBloc>(() => _i602.HomeBloc());
     gh.lazySingleton<_i541.UrlConfiguration>(
       () => _i541.DevelopmentUrlConfiguration(),
       registerFor: {_dev},
@@ -49,6 +52,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i541.ProductionUrlConfiguration(),
       registerFor: {_prod},
     );
+    gh.factory<_i471.PhotosRepository>(() => _i135.PhotosRepositoryImpl(
+          gh<_i154.Api>(),
+          gh<_i333.ApiEndpoints>(),
+        ));
+    gh.factory<_i602.HomeBloc>(
+        () => _i602.HomeBloc(gh<_i471.PhotosRepository>()));
     return this;
   }
 }
