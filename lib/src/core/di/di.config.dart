@@ -10,6 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:photo_library/src/core/constants/api_endpoints.dart' as _i333;
 import 'package:photo_library/src/core/services/api_services/api_service.dart'
     as _i154;
 import 'package:photo_library/src/core/services/api_services/config/url_config.dart'
@@ -39,6 +40,8 @@ extension GetItInjectableX on _i174.GetIt {
       registerFor: {_local},
     );
     gh.singleton<_i154.Api>(() => _i154.Api(gh<_i541.UrlConfiguration>()));
+    gh.singleton<_i333.ApiEndpoints>(
+        () => _i333.ApiEndpoints(gh<_i541.UrlConfiguration>()));
     gh.lazySingleton<_i541.UrlConfiguration>(
       () => _i541.ProductionUrlConfiguration(),
       registerFor: {_prod},

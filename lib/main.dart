@@ -4,7 +4,6 @@ import 'package:photo_library/src/core/di/di.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   configureDependencies(Env.dev);
 
   runApp( MyApp());
