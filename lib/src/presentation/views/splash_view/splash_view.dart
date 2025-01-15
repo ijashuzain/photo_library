@@ -24,7 +24,7 @@ class _SplashViewState extends State<SplashView> {
 
   void _navigate() async {
     Future.delayed(const Duration(seconds: 2), () {
-      context.router.replace(const HomeRoute());
+      context.router.replace(HomeRoute());
     });
   }
 
@@ -33,7 +33,7 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       body: Center(
         child: SizedBox(
-          width: 120.dp,
+          width: 90.dp,
           child: Image.asset(
             Assets.images.appIcon.path,
           ),

@@ -172,7 +172,7 @@ abstract class _GetPhotosEvent implements HomeEvent {
 /// @nodoc
 mixin _$HomeState {
   Status get getPhotosStatus => throw _privateConstructorUsedError;
-  List<dynamic> get photos => throw _privateConstructorUsedError;
+  List<PhotoModel> get photos => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -186,7 +186,7 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({Status getPhotosStatus, List<dynamic> photos});
+  $Res call({Status getPhotosStatus, List<PhotoModel> photos});
 
   $StatusCopyWith<$Res> get getPhotosStatus;
 }
@@ -217,7 +217,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       photos: null == photos
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<PhotoModel>,
     ) as $Val);
   }
 
@@ -240,7 +240,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status getPhotosStatus, List<dynamic> photos});
+  $Res call({Status getPhotosStatus, List<PhotoModel> photos});
 
   @override
   $StatusCopyWith<$Res> get getPhotosStatus;
@@ -270,7 +270,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       photos: null == photos
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<PhotoModel>,
     ));
   }
 }
@@ -279,14 +279,14 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
-      {required this.getPhotosStatus, required final List<dynamic> photos})
+      {required this.getPhotosStatus, required final List<PhotoModel> photos})
       : _photos = photos;
 
   @override
   final Status getPhotosStatus;
-  final List<dynamic> _photos;
+  final List<PhotoModel> _photos;
   @override
-  List<dynamic> get photos {
+  List<PhotoModel> get photos {
     if (_photos is EqualUnmodifiableListView) return _photos;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_photos);
@@ -323,12 +323,12 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {required final Status getPhotosStatus,
-      required final List<dynamic> photos}) = _$HomeStateImpl;
+      required final List<PhotoModel> photos}) = _$HomeStateImpl;
 
   @override
   Status get getPhotosStatus;
   @override
-  List<dynamic> get photos;
+  List<PhotoModel> get photos;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

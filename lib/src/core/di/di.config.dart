@@ -15,6 +15,8 @@ import 'package:photo_library/src/core/services/api_services/api_service.dart'
     as _i154;
 import 'package:photo_library/src/core/services/api_services/config/url_config.dart'
     as _i541;
+import 'package:photo_library/src/presentation/blocs/home_bloc/home_bloc.dart'
+    as _i602;
 
 const String _dev = 'dev';
 const String _local = 'local';
@@ -31,6 +33,7 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i602.HomeBloc>(() => _i602.HomeBloc());
     gh.lazySingleton<_i541.UrlConfiguration>(
       () => _i541.DevelopmentUrlConfiguration(),
       registerFor: {_dev},
@@ -39,9 +42,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i541.LocalUrlConfiguration(),
       registerFor: {_local},
     );
-    gh.singleton<_i154.Api>(() => _i154.Api(gh<_i541.UrlConfiguration>()));
     gh.singleton<_i333.ApiEndpoints>(
         () => _i333.ApiEndpoints(gh<_i541.UrlConfiguration>()));
+    gh.singleton<_i154.Api>(() => _i154.Api(gh<_i541.UrlConfiguration>()));
     gh.lazySingleton<_i541.UrlConfiguration>(
       () => _i541.ProductionUrlConfiguration(),
       registerFor: {_prod},

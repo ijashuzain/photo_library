@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'dart:math';
-
 import 'package:the_responsive_builder/the_responsive_builder.dart';
 
 class PinterestItem {
@@ -19,54 +17,6 @@ class PinterestItem {
     required this.likeCount,
     required this.aspectRatio,
   });
-
-  factory PinterestItem.withRandomAspectRatio({
-    required String id,
-    required String imageUrl,
-    required String title,
-    required int likeCount,
-  }) {
-    return PinterestItem(
-      id: id,
-      imageUrl: imageUrl,
-      title: title,
-      likeCount: likeCount,
-      aspectRatio: _aspectRatios[Random().nextInt(_aspectRatios.length)],
-    );
-  }
-
-  static final List<double> _aspectRatios = [
-    0.5,
-    0.6,
-    0.667,
-    0.75,
-    0.8,
-    0.85,
-    0.9,
-    1.0,
-    1.1,
-    1.15,
-    1.25,
-    1.333,
-    1.4,
-    1.5,
-    1.6,
-    1.667,
-    1.75,
-    1.778,
-    1.85,
-    2.0,
-    0.55,
-    0.65,
-    0.7,
-    1.9,
-    1.65,
-    1.45,
-    0.8,
-    1.91,
-    1.4,
-    1.77,
-  ];
 }
 
 class PinterestGrid extends StatelessWidget {
@@ -84,6 +34,8 @@ class PinterestGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MasonryGridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       controller: scrollController,
       itemCount: items.length,
       gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
@@ -100,14 +52,14 @@ class PinterestGrid extends StatelessWidget {
             color: Colors.transparent,
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.dp),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius:  BorderRadius.all(
-                     Radius.circular(12.dp),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.dp),
                   ),
                   child: AspectRatio(
                     aspectRatio: item.aspectRatio,
@@ -120,10 +72,7 @@ class PinterestGrid extends StatelessWidget {
                           color: Colors.grey[200],
                           child: Center(
                             child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                                  : null,
+                              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                             ),
                           ),
                         );
@@ -131,7 +80,7 @@ class PinterestGrid extends StatelessWidget {
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           color: Colors.grey[200],
-                          child:  Center(
+                          child: Center(
                             child: Icon(
                               Icons.image_not_supported,
                               color: Colors.grey,
@@ -153,7 +102,7 @@ class PinterestGrid extends StatelessWidget {
                           Expanded(
                             child: Text(
                               item.title,
-                              style:  TextStyle(
+                              style: TextStyle(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -162,14 +111,14 @@ class PinterestGrid extends StatelessWidget {
                             ),
                           ),
                           Gap(4.dp),
-                          const Icon(
+                          Icon(
                             Icons.more_horiz,
-                            size: 16,
+                            size: 16.dp,
                             color: Colors.grey,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      Gap(4.dp),
                       Row(
                         children: [
                           const Icon(
@@ -180,7 +129,7 @@ class PinterestGrid extends StatelessWidget {
                           Gap(4.dp),
                           Text(
                             '${item.likeCount}',
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontSize: 10.sp,
                               color: Colors.grey,
                             ),
